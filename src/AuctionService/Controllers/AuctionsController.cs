@@ -57,7 +57,7 @@ public class AuctionsController : ControllerBase
         if (auction == null) return NotFound();
 
         // TODO: check if current user is the seller
-        
+
         auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
         auction.Item.Model = updateAuctionDto.Model ?? auction.Item.Model;
         auction.Item.Color = updateAuctionDto.Color ?? auction.Item.Color;
@@ -66,6 +66,21 @@ public class AuctionsController : ControllerBase
 
         var result = await _context.SaveChangesAsync() > 0;
         if (!result) return BadRequest("Failed to update auction");
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAuction(Guid id)
+    {
+        var auction = await _context.Auctions.FindAsync(id);
+        if (auction == null) return NotFound();
+        
+        // TODO: check if current user is the seller
+
+        _context.Auctions.Remove(auction);
+        var result = await _context.SaveChangesAsync() > 0;
+        
+        if (!result) return BadRequest("Failed to delete auction");
         return Ok();
     }
 
