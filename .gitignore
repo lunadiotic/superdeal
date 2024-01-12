@@ -21,3 +21,5 @@
 # Compiled files
 bin/
 obj/
+
+.fake
